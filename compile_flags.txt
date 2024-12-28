@@ -1,0 +1,3 @@
+-I/usr/include/llvm-14
+-I/usr/include/llvm-c-14
+-std=c++17

@@ -1,0 +1,73 @@
+/* Copy and paste at https://dundalek.com/GrammKit/ */
+
+/* A tony program is just a function definition. */
+Program ::= FunctionDef
+
+/* Declarations. */
+
+DeclarationList ::= ( Declaration )*
+Declaration ::= VariableDecl | FunctionDecl | FunctionDef
+
+FunctionDef ::= 'def' Header ':' DeclarationList StatementList 'end'
+FunctionDecl ::= 'decl' Header
+Header ::= ( Type )? Identifier '(' ParameterList ')'
+
+ParameterList ::= ( Parameter ( ';' Parameter )* )?
+Parameter ::= ( 'ref' )? Type Identifier ( ',' Identifier )*
+
+VariableDecl ::= Type Identifier ( ',' Identifier )*
+
+/* Types. */
+
+Type ::= ( 'int' | 'bool' | 'char' | 'list' '[' Type ']' ) TypeTail
+TypeTail ::= ( '[' ']' )*
+
+/* Statements. */
+
+StatementList ::= ( Statement )+
+SimpleStatementList ::= SimpleStmt ( ',' SimpleStmt )*
+
+Statement ::= SimpleStmt
+            | 'exit'
+            | 'return' Expression
+            | IfStmt
+            | ForStmt
+
+SimpleStmt ::= 'skip'
+             | StringLiteral SimpleStatementTail
+             | Identifier ( SimpleStatementTail | '(' ExpressionList ')' ( SimpleStatementTail )? )
+SimpleStatementTail ::= AtomExpressionTail ':=' Expression
+
+IfStmt ::= 'if' Expression ':' StatementList ( 'elsif' Expression ':' StatementList )* ( 'else' ':' StatementList )? 'end'
+
+ForStmt ::= 'for' SimpleStatementList ';' Expression ';' SimpleStatementList ':' StatementList 'end'
+
+/* Expressions. */
+
+ExpressionList ::= ( Expression ( ',' Expression )* )?
+
+Expression ::= OrExpr
+OrExpr ::= AndExpr ( 'or' AndExpr )*
+AndExpr ::= RelationalExpr ( 'and' RelationalExpr )*
+RelationalExpr ::= ConsExpr ( ( '=' | '<>' | '>' | '<' | '>=' | '<=' ) ConsExpr )?
+ConsExpr ::= AdditiveExpr ( '#' ConsExpr )?
+AdditiveExpr ::= MultiplicativeExpr ( ( '+' | '-' ) MultiplicativeExpr )*
+MultiplicativeExpr ::= UnaryExpr ( ( '*' | '/' | 'mod' ) UnaryExpr )*
+
+UnaryExpr ::= ( '+' | '-' ) UnaryExpr
+            | 'not' RelationalExpr
+            | PrimaryExpr
+
+PrimaryExpr ::= AtomExpr
+              | IntegerLiteral
+              | CharacterLiteral
+              | '(' Expression ')'
+              | 'true'
+              | 'false'
+              | 'new' Type '[' Expression ']'
+              | 'nil'
+              | ( 'nil?' | 'head' | 'tail' ) '(' Expression ')'
+
+AtomExpr ::= StringLiteral AtomExpressionTail
+           | Identifier ( AtomExpressionTail | '(' ExpressionList ')' AtomExpressionTail )
+AtomExpressionTail ::= ( '[' Expression ']' )*

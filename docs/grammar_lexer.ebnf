@@ -1,0 +1,14 @@
+/* Copy and paste at https://dundalek.com/GrammKit/ */
+
+Identifier ::= [a-zA-Z] ( [a-zA-Z0-9_?] )*
+
+IntegerLiteral ::= [0-9]+
+
+CharacterLiteral ::= "'" ( CommonCharacter | EscapeSequence ) "'"
+
+StringLiteral ::= '"' ( CommonCharacter | EscapeSequence )* '"'
+
+/* all ascii printable characters (0x20 - 0x7E) except for double quotes (0x22), single quotes (0x27) and the backslash character (0x5C) */
+CommonCharacter ::= [\x20-\x21\x23-\x26\x28-\x5B\x5D-\x7E]
+
+EscapeSequence ::= '\' ( [ntr0\\'"] | x [0-9A-Fa-f] [0-9A-Fa-f] )

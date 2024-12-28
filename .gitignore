@@ -1,0 +1,6 @@
+tc
+.depend
+*.o
+*.ll
+*~
+.vscode
